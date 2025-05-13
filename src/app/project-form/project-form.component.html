@@ -39,16 +39,27 @@
                     <div class="invalid-feedback" *ngIf="deadline?.errors?.
     ['required']">Deadline is required</div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="budget" class="form-label">Budget*</label>
-                    <div class="input-group">
-                        <span class="input-group-text">$</span>
-                        <input type="number" id="budget" formControlName="budget" class="formcontrol"
-                            [ngClass]="{'is-invalid': budget?.touched && budget?.invalid}">
-                        <div class="invalid-feedback" *ngIf="budget?.errors?.['required']">Budget
-                            is required</div>
-                        <div class="invalid-feedback" *ngIf="budget?.errors?.['min']">Budget must
-                            be positive</div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="hasBudgetConstraint"
+                                formControlName="hasBudgetConstraint">
+                            <label class="form-check-label" for="hasBudgetConstraint">
+                                Has budget constraint?
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="budget" class="form-label">Budget*</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" id="budget" formControlName="budget" class="form-control"
+                                [ngClass]="{'is-invalid': budget?.touched && budget?.invalid}">
+                            <div class="invalid-feedback" *ngIf="budget?.errors?.['required']">Budget is
+                                required</div>
+                            <div class="invalid-feedback" *ngIf="budget?.errors?.['min']">Budget must be
+                                positive</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -195,3 +206,9 @@
         </div>
     </div>
 </form>
+<div *ngIf="projectForm.invalid && projectForm.touched" class="alert alert-danger mt-3">
+    <p>Please fix the following errors:</p>
+    <ul>
+        <li *ngFor="let error of getFormValidationErrors()">{{ error }}</li>
+    </ul>
+</div>

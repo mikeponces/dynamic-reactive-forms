@@ -26,10 +26,23 @@ export class ProjectFormComponent {
       description: ['', Validators.maxLength(500)],
       priority: ['Medium', Validators.required],
       deadline: ['', Validators.required],
-      budget: [0, [Validators.required, Validators.min(0)]],
+      hasBudgetConstraint: [false],
+      budget: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0)]],
       teamMembers: this.fb.array([]),
-      tasks: this.fb.array([])
+      tasks: this.fb.array([]),
     });
+
+    // Watch for changes to conditionally enable/disable budget field
+    this.projectForm.get('hasBudgetConstraint')?.valueChanges.subscribe(hasBudget => {
+      const budgetControl = this.projectForm.get('budget');
+      if (hasBudget) {
+        budgetControl?.enable();
+      } else {
+        budgetControl?.disable();
+        budgetControl?.setValue(0);
+      }
+    });
+
     // Add one team member and task by default
     this.addTeamMember();
     this.addTask();
@@ -127,5 +140,18 @@ export class ProjectFormComponent {
         });
       }
     });
+  }
+
+  getFormValidationErrors(): string[] {
+    const errors: string[] = [];
+    Object.keys(this.projectForm.controls).forEach(key => {
+      const control = this.projectForm.get(key);
+      if (control && control.errors) {
+        if (control.errors['required']) errors.push(`${key} is required`);
+        if (control.errors['minlength']) errors.push(`${key} is too short`);
+        // Add more validation rules as needed
+      }
+    });
+    return errors;
   }
 }
