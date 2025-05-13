@@ -1,0 +1,13 @@
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h4>Form Data Preview</h4>
+    </div>
+    <div class="card-body">
+        <ng-container *ngIf="formData; else noData">
+            <pre>{{ formData | json }}</pre>
+        </ng-container>
+        <ng-template #noData>
+            <p class="text-muted">Submit the form to see data</p>
+        </ng-template>
+    </div>
+</div>
